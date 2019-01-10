@@ -29,6 +29,6 @@ async def on_ready():
 
 
 
-client.run('NTIwMjgwNTUxMzg3ODI0MTI5.Dxfakw.3XDXRBBDGJbYuKmusUp3d1lp4PU')
+client.run('secreto')
 	
 		 
