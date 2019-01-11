@@ -9,7 +9,7 @@ class clima():
 
     @commands.command()
     async def clima(self, ctx, *, buscar=None):
-        if buscar is None: 
+        if buscar is None:      
             await ctx.send(f'Olá {ctx.author.mention}, você precisa digitar uma cidade ou país!')
             return
 
@@ -18,17 +18,23 @@ class clima():
         if r.status_code == 200:
             js = r.json()
 
-        embed=discord.Embed(title="Previsão do Tempo para {}".format(busca), color=0x0a83fc)
-        embed.add_field(name="Cidade", value=str(js['location']['name']), inline=False)
+        embed=discord.Embed(title="Previsão do Tempo para {}".format(str(js['location']['name'])), color=0x0a83fc)
+        embed.add_field(name="Cidade", value=str(js['location']['name']), inline=True)
         embed.add_field(name="Estado", value=str(js['location']['region']), inline=True)
-        embed.add_field(name="País", value=str(js['location']['country']), inline=False)
-        embed.add_field(name="Latitude", value=str(js['location']['lat']), inline=False)
-        embed.add_field(name="Longitude", value=str(js['location']['lon']), inline=False) 
-        embed.add_field(name="Condição", value=str(js['current']['condition']['text']), inline=False)
-        embed.add_field(name="Temperatura em C°", value=str(js['current']['temp_c']), inline=False) 
+        embed.add_field(name="País", value=str(js['location']['country']), inline=True)
+        embed.add_field(name="Latitude", value=str(js['location']['lat']), inline=True)
+        embed.add_field(name="Longitude", value=str(js['location']['lon']), inline=True) 
+        embed.add_field(name="Condição", value=str(js['current']['condition']['text'])
+        .replace("Sunny","Ensolarado")
+        .replace("Partly cloudy", "Parcialmente Nublado")
+        .replace("Moderate rain", "Chuva Moderada")
+        .replace("Overcast", "Nublado")
+        .replace('Moderate or heavy rain with thunder', 'Chuva moderada ou pesada com trovões'), inline=True)
+        embed.add_field(name="Temperatura em C°", value=str(js['current']['temp_c']), inline=True) 
+        embed.add_field(name="Sensação Térmica Em C°", value=str(js['current']['feelslike_c']), inline=True) 
         url = 'https:'+str(js['current']['condition']['icon'])
         embed.set_thumbnail(url=url)
-        embed.set_footer(text="Climatempo 2019 Todos os Direitos Reservados")
+        embed.set_footer(text="Pedido feito por {} - Úlima atualzação metereológica feita em {}".format(ctx.author.name, str(js['current']['last_updated'])))
         await ctx.send(embed=embed)
         
 
